@@ -1,6 +1,5 @@
 #ifndef ABB_H
 #define ABB_H
-#include "cola.h"
 
 
 
@@ -13,9 +12,8 @@
 typedef char *tipoclave;
 
 typedef struct tipoelem{
-    char nomeXogador[L];
-    char rol;
-    cola Tarefas;
+    char* lexema;
+    int tipo;
 }tipoelem;
 
 //////////////////////////////////////////FIN PARTE MODIFICABLE
@@ -98,6 +96,21 @@ void suprimir(abb *A,tipoelem E);
  * @param nodo
  */
 void modificar(abb A, tipoelem nodo);
+
+/**
+ * Imprime a árbore
+ * @param A
+ */
+void imprimir(abb A);
+
+/**
+ * Inserta un novo nodo na árbore para o elemento E
+ * do que toma a su clave. Se xa existe o nodo, devolve o
+ *
+ * @param A Arbol binario
+ * @param E Informacion del nuevo nodo.
+ */
+int buscarInsertar(abb *A, tipoelem E);
 
 #endif	// ABB_H
 

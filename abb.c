@@ -6,6 +6,8 @@
 
 ///////////////////////// ESTRUCTURAS DE DATOS
 
+
+
 struct celda {
     tipoelem info;
     struct celda *izq, *der;
@@ -19,7 +21,7 @@ struct celda {
 
 /*Extraer la clave de una celda */
 tipoclave _clave_elem(tipoelem *E) {
-    return E->nomeXogador;
+    return E->lexema;
 }
 
 /* Esta funcion puente nos permite modificar el tipo de
@@ -34,7 +36,6 @@ int _comparar_claves(tipoclave cl1, tipoclave cl2) {
  * destruirse ha de hacerse aqui. El uso de esta funcion
  * permite hacer mas eficiente la destruccion del arbol.*/
 void _destruir_elem(struct tipoelem *E) {
-      destruir_cola(&E->Tarefas);
 }
 
 /////////////////////////// FIN PARTE MODIFICABLE
@@ -207,4 +208,37 @@ void _modificar(abb A, tipoclave cl, tipoelem nodo) {
 void modificar(abb A, tipoelem nodo) {
     tipoclave cl = _clave_elem(&nodo);
     _modificar(A, cl, nodo);
+}
+
+void imprimir(abb A){
+
+    if(!es_vacio(A)){
+        if(A->izq != NULL)
+            imprimir(A->izq);
+        printf("Lexema: %s\n", A->info.lexema);
+        printf("Compoñente Léxico: %d\n\n", A->info.tipo);
+        if(A->der != NULL)
+            imprimir(A->der);
+
+    }
+}
+
+
+int buscarInsertar(abb *A, tipoelem E) {
+    if (es_vacio(*A)) {
+        *A = (abb) malloc(sizeof (struct celda));
+        (*A)->info = E;
+        (*A)->izq = NULL;
+        (*A)->der = NULL;
+        return E.tipo;
+    }
+    tipoclave cl = _clave_elem(&E);
+    int comp = _comparar_clave_elem(cl, (*A)->info);
+    if (comp > 0) {
+        insertar(&(*A)->der, E);
+    } else if(comp == 0){
+        return E.tipo;
+    } else {
+        insertar(&(*A)->izq, E);
+    }
 }

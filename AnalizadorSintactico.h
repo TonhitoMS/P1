@@ -1,8 +1,9 @@
-//
-// Created by antonio on 15/03/22.
-//
+
 
 #ifndef P1_ANALIZADORSINTACTICO_H
 #define P1_ANALIZADORSINTACTICO_H
+
+
+void analise();
 
 #endif //P1_ANALIZADORSINTACTICO_H

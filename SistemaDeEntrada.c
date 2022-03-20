@@ -39,7 +39,9 @@ void iniciarSDE(char *arq){
 
 void encherBuffer(){
     if(!buffer){
-        fseek(arquivo, posArq, SEEK_CUR);
+        //printf("\nEnchemos buffer2\n");
+        //printf("\n%ld\n", posArq);
+        fseek(arquivo, posArq, SEEK_SET);
         fread(dB.buffer2, sizeof (char), TARRAY(dB.buffer2) - 1, arquivo);
         dB.buffer2[TARRAY(dB.buffer2) - 1] = EOF;
 
@@ -48,13 +50,15 @@ void encherBuffer(){
         }
         else{
             fflush(arquivo);
+            //printf("\n%d\n", posArq);
             posArq = ftell(arquivo);
+            //printf("\n%ld\n", posArq);
             dB.dianteiro = 0;
         }
 
     }
     else if(buffer){
-        fseek(arquivo, posArq, SEEK_CUR);
+        fseek(arquivo, posArq, SEEK_SET);
         fread(dB.buffer1, sizeof (char), TARRAY(dB.buffer1) - 1, arquivo);
         dB.buffer1[TARRAY(dB.buffer1) - 1] = EOF;
 
@@ -72,8 +76,9 @@ void encherBuffer(){
 }
 
 void cambiarBActivo(){
-    if(!buffer) buffer = 1;
-    else buffer = 0;
+    /*if(!buffer) buffer = 1;
+    else buffer = 0;*/
+    buffer = !buffer;
 
 }
 
@@ -82,7 +87,9 @@ char seguinteCaracter(){
 
     if(!buffer){
         if((car = dB.buffer1[dB.dianteiro]) == EOF){
+            //printf("\nEncontramos EOF buffer 1\n");
             if(!feof(arquivo)){
+                //printf("\nNon é fin de ficheiro\n");
                 if(!retroceso) encherBuffer();
                 else retroceso = 0;
                 cambiarBActivo();
@@ -94,6 +101,7 @@ char seguinteCaracter(){
     }
     else if(buffer){
         if((car = dB.buffer2[dB.dianteiro]) == EOF){
+            //printf("\nEncontramos EOF\n");
             if(!feof(arquivo)){
                 if(!retroceso) encherBuffer();
                 else retroceso = 0;

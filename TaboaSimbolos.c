@@ -19,7 +19,7 @@ void inicioTaboa(){
             {"go", GO},
             {"float", FLOAT},
             {"real", REAL},
-            {"_", BLANK}
+            {"_", BLANK},
     };
 
     crear(&taboa);
@@ -27,6 +27,7 @@ void inicioTaboa(){
         insertar(&taboa, palabras[i]);
         printf("%s %d, ", palabras[i].lexema, palabras[i].tipo);
     }
+    //printf("\nPackage: %d\n",buscarInsertar(&taboa, palabras[0]));
     imprimirTaboa(taboa);
 }
 
@@ -42,6 +43,6 @@ void destruirTaboa(){
 }
 
 int insertarNaTaboa(char* cadea){
-    tipoelem elemento = {cadea, IDENTIFICADOR};
+    tipoelem elemento = {cadea, 0};
     return buscarInsertar(&taboa, elemento);
 }

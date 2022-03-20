@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Definicions.h"
 
 
 ///////////////////////// ESTRUCTURAS DE DATOS
@@ -226,6 +227,7 @@ void imprimir(abb A){
 
 int buscarInsertar(abb *A, tipoelem E) {
     if (es_vacio(*A)) {
+        E.tipo = IDENTIFICADOR;
         *A = (abb) malloc(sizeof (struct celda));
         (*A)->info = E;
         (*A)->izq = NULL;
@@ -235,10 +237,10 @@ int buscarInsertar(abb *A, tipoelem E) {
     tipoclave cl = _clave_elem(&E);
     int comp = _comparar_clave_elem(cl, (*A)->info);
     if (comp > 0) {
-        insertar(&(*A)->der, E);
+        buscarInsertar(&(*A)->der, E);
     } else if(comp == 0){
-        return E.tipo;
+        return (*A)->info.tipo;
     } else {
-        insertar(&(*A)->izq, E);
+        buscarInsertar(&(*A)->izq, E);
     }
 }

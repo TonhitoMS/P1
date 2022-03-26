@@ -37,6 +37,7 @@ int _comparar_claves(tipoclave cl1, tipoclave cl2) {
  * destruirse ha de hacerse aqui. El uso de esta funcion
  * permite hacer mas eficiente la destruccion del arbol.*/
 void _destruir_elem(struct tipoelem *E) {
+    //free(E->lexema);
 }
 
 /////////////////////////// FIN PARTE MODIFICABLE
@@ -226,21 +227,49 @@ void imprimir(abb A){
 
 
 int buscarInsertar(abb *A, tipoelem E) {
+    //printf("\nLexema árbore: %s\n", E.lexema);
     if (es_vacio(*A)) {
+        //printf("\nBaleiro\n");
         E.tipo = IDENTIFICADOR;
         *A = (abb) malloc(sizeof (struct celda));
         (*A)->info = E;
+        //printf("\nInfo insertamos: %s\n", (*A)->info.lexema);
         (*A)->izq = NULL;
         (*A)->der = NULL;
         return E.tipo;
     }
     tipoclave cl = _clave_elem(&E);
     int comp = _comparar_clave_elem(cl, (*A)->info);
+    //printf("Info: %s\nCl: %s\nComp: %d\nTipo: %d\n", (*A)->info.lexema, cl, comp, E.tipo);
     if (comp > 0) {
-        buscarInsertar(&(*A)->der, E);
+        return buscarInsertar(&(*A)->der, E);
     } else if(comp == 0){
+        //printf("\nIguais\n");
         return (*A)->info.tipo;
     } else {
-        buscarInsertar(&(*A)->izq, E);
+        return buscarInsertar(&(*A)->izq, E);
     }
 }
+
+/*
+int buscarInsertar(abb *A, char* cadena){
+    if (es_vacio(*A)){
+        *A = (abb) malloc(sizeof (struct celda));
+        (*A)->info.lexema = (char*) malloc(strlen(cadena) * sizeof(char));
+        (*A)->info.lexema[0] = '\0';
+        strncat((*A)->info.lexema, cadena, strlen(cadena));
+        (*A)->info.tipo = IDENTIFICADOR;
+        (*A)->izq = NULL;
+        (*A)->der = NULL;
+        return IDENTIFICADOR;
+    }
+    else if (strcmp(cadena,(*A)->info.lexema)==0){
+        return ((*A)->info.tipo);
+    }
+    else if (strcmp(cadena,(*A)->info.lexema)<0){
+        return (buscarInsertar(&(*A)->izq, cadena));
+    }
+    else{
+        return (buscarInsertar(&(*A)->der, cadena));
+    }
+}*/

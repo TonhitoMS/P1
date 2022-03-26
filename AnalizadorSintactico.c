@@ -10,11 +10,11 @@ void analise(){
     lex = (CompLex*) malloc(sizeof(CompLex));
     lex->lex = NULL;
 
-    /*while(sigLex(lex)){
-        printf("<%d, ""%s"">\n", lex->tipo, lex->lex);
-    }*/
-    sigLex(lex);
-    printf("<%d, ""%s"">\n", lex->tipo, lex->lex);
+    while(sigLex(lex)){
+        printf("\n<%d, ""%s"">\n", lex->tipo, lex->lex);
+    }
+    //sigLex(lex);
+    //printf("<%d, ""%s"">\n", lex->tipo, lex->lex);
 
     printf("\nChegou ao fin do ficheiro\n");
 

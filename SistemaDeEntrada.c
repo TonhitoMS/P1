@@ -15,6 +15,7 @@ FILE *arquivo;
 int buffer;
 int retroceso = 0;
 long posArq = 0;
+int bytes = N;
 
 void iniciarSDE(char *arq){
     dB.inicio = 0;
@@ -42,8 +43,8 @@ void encherBuffer(){
         //printf("\nEnchemos buffer2\n");
         //printf("\n%ld\n", posArq);
         fseek(arquivo, posArq, SEEK_SET);
-        fread(dB.buffer2, sizeof (char), TARRAY(dB.buffer2) - 1, arquivo);
-        dB.buffer2[TARRAY(dB.buffer2) - 1] = EOF;
+        bytes = fread(dB.buffer2, sizeof (char), TARRAY(dB.buffer2) - 1, arquivo);
+        dB.buffer2[bytes] = EOF;
 
         if(ferror(arquivo)){
             printf("Erro no inicio do buffer A");
@@ -59,8 +60,8 @@ void encherBuffer(){
     }
     else if(buffer){
         fseek(arquivo, posArq, SEEK_SET);
-        fread(dB.buffer1, sizeof (char), TARRAY(dB.buffer1) - 1, arquivo);
-        dB.buffer1[TARRAY(dB.buffer1) - 1] = EOF;
+        bytes = fread(dB.buffer1, sizeof (char), TARRAY(dB.buffer1) - 1, arquivo);
+        dB.buffer1[bytes] = EOF;
 
         if(ferror(arquivo)){
             printf("Erro no inicio do buffer A");
@@ -95,11 +96,12 @@ char seguinteCaracter(){
                 cambiarBActivo();
                 car = seguinteCaracter();
             }
-
+            else dB.dianteiro ++;
         }
         else dB.dianteiro++;
     }
     else if(buffer){
+        //printf("\n%s\n", dB.buffer2);
         if((car = dB.buffer2[dB.dianteiro]) == EOF){
             //printf("\nEncontramos EOF\n");
             if(!feof(arquivo)){
@@ -108,7 +110,7 @@ char seguinteCaracter(){
                 cambiarBActivo();
                 car = seguinteCaracter();
             }
-
+            else dB.dianteiro++;
         }
         else dB.dianteiro++;
     }

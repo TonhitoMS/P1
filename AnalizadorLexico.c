@@ -25,6 +25,7 @@ void iniciarLex(CompLex *lex){
     }
 
     lex->lex = (char*) malloc(memoria * sizeof(char));
+    memset(lex->lex, 0, memoria);
     lex->tipo = 0;
 }
 
@@ -55,7 +56,7 @@ int sigLex(CompLex *lex){
             if(isalpha(car) || isdigit(car) || car == '_'){
                 while (isalpha(car) || isdigit(car) || car == '_'){
                     car = seguinteCaracter();
-                    printf("%c\n", car);
+                    //printf("%c\n", car);
                     novoCar(lex, car);
                 }
                 lex->lex[strlen(lex->lex)-1] = '\0';
@@ -63,9 +64,215 @@ int sigLex(CompLex *lex){
                 aceptarLexema();
                 encontrado++;
                 fin = 1;
+                //printf("\nLexema: %s\n", lex->lex);
+                lex->tipo = -1;
+                lex->tipo = insertarNaTaboa(lex->lex);
+            }
+            else if (isalpha(lex->lex[strlen(lex->lex)-2])){
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                retrocederCaracter();
+                aceptarLexema();
+                encontrado++;
+                fin = 1;
+                //printf("\nLexema: %s\n", lex->lex);
+                lex->tipo = -1;
                 lex->tipo = insertarNaTaboa(lex->lex);
             }
         }
+        else if(car == '"'){
+            car = seguinteCaracter();
+            novoCar(lex, car);
+            while(car != '"'){
+                car = seguinteCaracter();
+                novoCar(lex, car);
+            }
+            //novoCar(lex, car);
+            lex->lex[strlen(lex->lex)] = '\0';
+            encontrado ++;
+            lex->tipo = STRING;
+        }
+        else if(car == EOF){
+            printf("Encontramos EOF\n");
+            /*encontrado ++;
+            fin = 0;*/
+            return 0;
+        }
+        else if(car == '/'){
+            car = seguinteCaracter();
+            if(car == '/'){
+                car = seguinteCaracter();
+                while(car != '\n' && car != EOF){
+                    car = seguinteCaracter();
+                }
+                retrocederCaracter();
+            }
+            else if(car == '*'){
+                while(1){
+                    car = seguinteCaracter();
+                    //printf("%c", car);
+                    if(car == '\n') linea ++;
+                    else if(car == '*'){
+                        car = seguinteCaracter();
+                        //printf("%c", car);
+                        if(car == '/') { // probar: se non é / retroceder caracter e que siga o while
+                            aceptarLexema();
+                            break;
+                        }
+                        else{
+                            retrocederCaracter();
+                        }
+                        /*
+                        else if (car == '\n') linea++;
+                        else if(car == EOF){
+                            retrocederCaracter();
+                            aceptarLexema();
+                            break;
+                        }*/
+                    }
+                    else if(car == EOF){
+                        retrocederCaracter();
+                        aceptarLexema();
+                        break;
+                    }
+                }
+            }
+            else{
+                lex->tipo = lex->lex[strlen(lex->lex)-1];
+                encontrado ++;
+                retrocederCaracter();
+                aceptarLexema();
+            }
+        }
+        else if(car == ';' || car == ',' || car == '=' || car == '-' || car == '*' || car == '(' || car == ')' || car == '[' || car == ']' || car == '{' || car == '}'){
+            aceptarLexema();
+            lex->tipo = car;
+            encontrado++;
+        }
+        //--------------NÚMEROS---------
+        else if(isdigit(car)){//decimais
+            while(isdigit(car)){
+                car = seguinteCaracter();
+                novoCar(lex, car);
+            }
+            if((car == 'x' || car == 'X') && strlen(lex->lex) == 2 && lex->lex[0] == '0'){
+                car = seguinteCaracter();
+                novoCar(lex, car);
+                while(isxdigit(car)){
+                    car = seguinteCaracter();
+                    novoCar(lex, car);
+                }
+                retrocederCaracter();
+                lex->tipo = REAL;
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                encontrado ++;
+                aceptarLexema();
+            }
+            else if(car == '.'){
+                car = seguinteCaracter();
+                novoCar(lex, car);
+                while(isdigit(car)){
+                    car = seguinteCaracter();
+                    novoCar(lex, car);
+                }
+                if(car == 'e' || car == 'E'){
+                    car = seguinteCaracter();
+                    novoCar(lex, car);
+                    if(car == '+' || car == '-'){
+                        car = seguinteCaracter();
+                        novoCar(lex, car);
+                    }
+                    while(isdigit(car)){
+                        car = seguinteCaracter();
+                        novoCar(lex, car);
+                    }
+                    if(car == 'i'){
+                        lex->tipo = IMAXINARIO;
+                        encontrado ++;
+                        aceptarLexema();
+                    }
+                    else{
+                        retrocederCaracter();
+                        lex->lex[strlen(lex->lex)-1] = '\0';
+                        lex->tipo = REAL;
+                        encontrado ++;
+                        aceptarLexema();
+                    }
+                }
+            }
+            else if(car == 'E' || car == 'e'){
+                car = seguinteCaracter();//repitese co anterior
+                novoCar(lex, car);
+                if(car == '+' || car == '-'){
+                    car = seguinteCaracter();
+                    novoCar(lex, car);
+                }
+                while(isdigit(car)){
+                    car = seguinteCaracter();
+                    novoCar(lex, car);
+                }
+                if(car == 'i'){
+                    lex->tipo = IMAXINARIO;
+                    encontrado ++;
+                    aceptarLexema();
+                }
+                else{
+                    retrocederCaracter();
+                    lex->lex[strlen(lex->lex)-1] = '\0';
+                    lex->tipo = REAL;
+                    encontrado ++;
+                    aceptarLexema();//ata aquí
+                }
+            }
+            else{
+                retrocederCaracter();
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                lex->tipo = REAL;
+                encontrado ++;
+                aceptarLexema();
+            }
+        }
+        else if(car == '.'){//repítese co outro else de punto
+            car = seguinteCaracter();
+            novoCar(lex, car);
+            while(isdigit(car)){
+                car = seguinteCaracter();
+                novoCar(lex, car);
+            }
+            if(car == 'e' || car == 'E'){
+                car = seguinteCaracter();
+                novoCar(lex, car);
+                if(car == '+' || car == '-'){
+                    car = seguinteCaracter();
+                    novoCar(lex, car);
+                }
+                while(isdigit(car)){
+                    car = seguinteCaracter();
+                    novoCar(lex, car);
+                }
+                if(car == 'i'){
+                    lex->tipo = IMAXINARIO;
+                    encontrado ++;
+                    aceptarLexema();
+                }
+                else{
+                    retrocederCaracter();
+                    lex->lex[strlen(lex->lex)-1] = '\0';
+                    lex->tipo = REAL;
+                    encontrado ++;
+                    aceptarLexema();
+                }
+            }
+            else{
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                lex->tipo = lex->lex[strlen(lex->lex)-1];
+                encontrado ++;
+                retrocederCaracter();
+                aceptarLexema();
+            }
+        }
+
+
+
     }
 
     return fin;

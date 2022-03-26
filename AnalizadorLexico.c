@@ -196,7 +196,15 @@ int sigLex(CompLex *lex){
                         lex->tipo = REAL;
                         encontrado ++;
                         aceptarLexema();
+                        printf("\nOla\n");
                     }
+                }
+                else{
+                    retrocederCaracter();
+                    lex->lex[strlen(lex->lex)-1] = '\0';
+                    lex->tipo = REAL;
+                    encontrado ++;
+                    aceptarLexema();
                 }
             }
             else if(car == 'E' || car == 'e'){
@@ -223,10 +231,15 @@ int sigLex(CompLex *lex){
                     aceptarLexema();//ata aquí
                 }
             }
+            else if(car == 'i'){
+                lex->tipo = IMAXINARIO;
+                encontrado ++;
+                aceptarLexema();
+            }
             else{
                 retrocederCaracter();
                 lex->lex[strlen(lex->lex)-1] = '\0';
-                lex->tipo = REAL;
+                lex->tipo = ENTEIRO;
                 encontrado ++;
                 aceptarLexema();
             }
@@ -261,6 +274,55 @@ int sigLex(CompLex *lex){
                     encontrado ++;
                     aceptarLexema();
                 }
+            }
+            else{
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                lex->tipo = lex->lex[strlen(lex->lex)-1];
+                encontrado ++;
+                retrocederCaracter();
+                aceptarLexema();
+            }
+        }
+
+        else if(car == ':'){
+            car = seguinteCaracter();
+            novoCar(lex, car);
+            if(car == '='){
+                encontrado ++;
+                lex->tipo = OP_ASIG;
+                aceptarLexema();
+            }
+            else{
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                lex->tipo = lex->lex[strlen(lex->lex)-1];
+                encontrado ++;
+                retrocederCaracter();
+                aceptarLexema();
+            }
+        }
+        else if(car == '+'){
+            car = seguinteCaracter();
+            novoCar(lex, car);
+            if(car == '='){
+                encontrado ++;
+                lex->tipo = OP_SUMA_ASIG;
+                aceptarLexema();
+            }
+            else{
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                lex->tipo = lex->lex[strlen(lex->lex)-1];
+                encontrado ++;
+                retrocederCaracter();
+                aceptarLexema();
+            }
+        }
+        else if(car == '<'){
+            car = seguinteCaracter();
+            novoCar(lex, car);
+            if(car == '-'){
+                encontrado ++;
+                lex->tipo = OP_FRECHA;
+                aceptarLexema();
             }
             else{
                 lex->lex[strlen(lex->lex)-1] = '\0';

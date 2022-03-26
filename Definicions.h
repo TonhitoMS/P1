@@ -17,7 +17,7 @@
 //Fin palabras reservadas
 
 #define OP_ASIG 311 //:=
-#define OP_FECHA 312 //<-
+#define OP_FRECHA 312 //<-
 #define OP_SUMA_ASIG 313 //+=
 #define STRING 314
 #define ENTEIRO 315

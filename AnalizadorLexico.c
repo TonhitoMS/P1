@@ -64,8 +64,6 @@ int sigLex(CompLex *lex){
                 aceptarLexema();
                 encontrado++;
                 fin = 1;
-                //printf("\nLexema: %s\n", lex->lex);
-                lex->tipo = -1;
                 lex->tipo = insertarNaTaboa(lex->lex);
             }
             else if (isalpha(lex->lex[strlen(lex->lex)-2])){
@@ -73,16 +71,20 @@ int sigLex(CompLex *lex){
                 retrocederCaracter();
                 aceptarLexema();
                 encontrado++;
-                fin = 1;
-                //printf("\nLexema: %s\n", lex->lex);
-                lex->tipo = -1;
+                lex->tipo = insertarNaTaboa(lex->lex);
+            }
+            else if(lex->lex[strlen(lex->lex)-2] == '_'){
+                lex->lex[strlen(lex->lex)-1] = '\0';
+                retrocederCaracter();
+                aceptarLexema();
+                encontrado++;
                 lex->tipo = insertarNaTaboa(lex->lex);
             }
         }
         else if(car == '"'){
             car = seguinteCaracter();
             novoCar(lex, car);
-            while(car != '"'){
+            while(car != '"' || (lex->lex[strlen(lex->lex)-2] == '\\' && lex->lex[strlen(lex->lex)-3] != '\\')){
                 car = seguinteCaracter();
                 novoCar(lex, car);
             }
@@ -92,9 +94,6 @@ int sigLex(CompLex *lex){
             lex->tipo = STRING;
         }
         else if(car == EOF){
-            printf("Encontramos EOF\n");
-            /*encontrado ++;
-            fin = 0;*/
             return 0;
         }
         else if(car == '/'){
@@ -196,7 +195,6 @@ int sigLex(CompLex *lex){
                         lex->tipo = REAL;
                         encontrado ++;
                         aceptarLexema();
-                        printf("\nOla\n");
                     }
                 }
                 else{

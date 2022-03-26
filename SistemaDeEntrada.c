@@ -119,7 +119,7 @@ char seguinteCaracter(){
 }
 
 void retrocederCaracter(){
-    if(!buffer){
+    /*if(!buffer){
         if(dB.dianteiro == 0){
             cambiarBActivo();
             dB.dianteiro = N - 1; // última posición do buffer anterior
@@ -135,7 +135,14 @@ void retrocederCaracter(){
             retroceso = 1;
         }
         else dB.dianteiro --;
+    }*/
+    if(dB.dianteiro == 0){
+        cambiarBActivo();
+        dB.dianteiro = N - 1;
+        retroceso = 1;
     }
+    else dB.dianteiro --;
+
 
 }
 

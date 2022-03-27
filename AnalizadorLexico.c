@@ -38,6 +38,173 @@ void novoCar(CompLex *lex, char c){
 
 }
 
+int comentarios(CompLex *lex) {
+    char car;
+
+    car = seguinteCaracter();
+    if(car == '/'){
+        car = seguinteCaracter();
+        while(car != '\n' && car != EOF){
+            car = seguinteCaracter();
+        }
+        retrocederCaracter();
+    }
+    else if(car == '*'){
+        while(1){
+            car = seguinteCaracter();
+            //printf("%c", car);
+            if(car == '\n') linea ++;
+            else if(car == '*'){
+                car = seguinteCaracter();
+                //printf("%c", car);
+                if(car == '/') { // probar: se non é / retroceder caracter e que siga o while
+                    aceptarLexema();
+                    break;
+                }
+                else{
+                    retrocederCaracter();
+                }
+                /*
+                else if (car == '\n') linea++;
+                else if(car == EOF){
+                    retrocederCaracter();
+                    aceptarLexema();
+                    break;
+                }*/
+            }
+            else if(car == EOF){
+                retrocederCaracter();
+                aceptarLexema();
+                break;
+            }
+        }
+    }
+    else{
+        lex->tipo = lex->lex[strlen(lex->lex)-1];
+        retrocederCaracter();
+        aceptarLexema();
+        return 1;
+    }
+    return 0;
+}
+
+int strings(CompLex *lex){
+    char car;
+    int encontrado = 0;
+    car = seguinteCaracter();
+    novoCar(lex, car);
+    while(car != '"' || (lex->lex[strlen(lex->lex)-2] == '\\' && lex->lex[strlen(lex->lex)-3] != '\\')){
+        car = seguinteCaracter();
+        novoCar(lex, car);
+    }
+    lex->lex[strlen(lex->lex)] = '\0';
+    encontrado = 1;
+    lex->tipo = STRING;
+
+    return encontrado;
+}
+
+int idOUreservada(CompLex *lex){
+    char car;
+    int encontrado = 0;
+
+    car = seguinteCaracter();
+    novoCar(lex, car);
+
+    if(isalpha(car) || isdigit(car) || car == '_'){
+        while (isalpha(car) || isdigit(car) || car == '_'){
+            car = seguinteCaracter();
+            //printf("%c\n", car);
+            novoCar(lex, car);
+        }
+        lex->lex[strlen(lex->lex)-1] = '\0';
+        retrocederCaracter();
+        aceptarLexema();
+        encontrado++;
+        lex->tipo = insertarNaTaboa(lex->lex);
+    }
+    else if (isalpha(lex->lex[strlen(lex->lex)-2])){
+        lex->lex[strlen(lex->lex)-1] = '\0';
+        retrocederCaracter();
+        aceptarLexema();
+        encontrado++;
+        lex->tipo = insertarNaTaboa(lex->lex);
+    }
+    else if(lex->lex[strlen(lex->lex)-2] == '_'){
+        lex->lex[strlen(lex->lex)-1] = '\0';
+        retrocederCaracter();
+        aceptarLexema();
+        encontrado++;
+        lex->tipo = insertarNaTaboa(lex->lex);
+    }
+
+    return encontrado;
+}
+
+int asignacion(CompLex *lex){
+    char car;
+    int encontrado = 0;
+
+    car = seguinteCaracter();
+    novoCar(lex, car);
+    if(car == '='){
+        encontrado ++;
+        lex->tipo = OP_ASIG;
+        aceptarLexema();
+    }
+    else{
+        lex->lex[strlen(lex->lex)-1] = '\0';
+        lex->tipo = lex->lex[strlen(lex->lex)-1];
+        encontrado ++;
+        retrocederCaracter();
+        aceptarLexema();
+    }
+    return encontrado;
+}
+
+int sumaAsignacion(CompLex *lex){
+    char car;
+    int encontrado = 1;
+
+    car = seguinteCaracter();
+    novoCar(lex, car);
+    if(car == '='){
+        encontrado ++;
+        lex->tipo = OP_SUMA_ASIG;
+        aceptarLexema();
+    }
+    else{
+        lex->lex[strlen(lex->lex)-1] = '\0';
+        lex->tipo = lex->lex[strlen(lex->lex)-1];
+        encontrado ++;
+        retrocederCaracter();
+        aceptarLexema();
+    }
+    return encontrado;
+}
+
+int frecha(CompLex *lex){
+    char car;
+    int encontrado = 1;
+
+    car = seguinteCaracter();
+    novoCar(lex, car);
+    if(car == '-'){
+        encontrado ++;
+        lex->tipo = OP_FRECHA;
+        aceptarLexema();
+    }
+    else{
+        lex->lex[strlen(lex->lex)-1] = '\0';
+        lex->tipo = lex->lex[strlen(lex->lex)-1];
+        encontrado ++;
+        retrocederCaracter();
+        aceptarLexema();
+    }
+
+    return encontrado;
+}
+
 int sigLex(CompLex *lex){
     char car;
     int encontrado = 0;
@@ -50,7 +217,8 @@ int sigLex(CompLex *lex){
         fin = 1;
 
         if(isalpha(car) || car == '_'){
-            car = seguinteCaracter();
+            encontrado = idOUreservada(lex);
+            /*car = seguinteCaracter();
             novoCar(lex, car);
 
             if(isalpha(car) || isdigit(car) || car == '_'){
@@ -79,10 +247,11 @@ int sigLex(CompLex *lex){
                 aceptarLexema();
                 encontrado++;
                 lex->tipo = insertarNaTaboa(lex->lex);
-            }
+            }*/
         }
         else if(car == '"'){
-            car = seguinteCaracter();
+            encontrado = strings(lex);
+            /*car = seguinteCaracter();
             novoCar(lex, car);
             while(car != '"' || (lex->lex[strlen(lex->lex)-2] == '\\' && lex->lex[strlen(lex->lex)-3] != '\\')){
                 car = seguinteCaracter();
@@ -91,13 +260,14 @@ int sigLex(CompLex *lex){
             //novoCar(lex, car);
             lex->lex[strlen(lex->lex)] = '\0';
             encontrado ++;
-            lex->tipo = STRING;
+            lex->tipo = STRING;*/
         }
         else if(car == EOF){
             return 0;
         }
         else if(car == '/'){
-            car = seguinteCaracter();
+            encontrado = comentarios(lex);
+            /*car = seguinteCaracter();
             if(car == '/'){
                 car = seguinteCaracter();
                 while(car != '\n' && car != EOF){
@@ -120,13 +290,13 @@ int sigLex(CompLex *lex){
                         else{
                             retrocederCaracter();
                         }
-                        /*
+                        *//*
                         else if (car == '\n') linea++;
                         else if(car == EOF){
                             retrocederCaracter();
                             aceptarLexema();
                             break;
-                        }*/
+                        }*//*
                     }
                     else if(car == EOF){
                         retrocederCaracter();
@@ -140,7 +310,7 @@ int sigLex(CompLex *lex){
                 encontrado ++;
                 retrocederCaracter();
                 aceptarLexema();
-            }
+            }*/
         }
         else if(car == ';' || car == ',' || car == '=' || car == '-' || car == '*' || car == '(' || car == ')' || car == '[' || car == ']' || car == '{' || car == '}'){
             aceptarLexema();
@@ -283,7 +453,8 @@ int sigLex(CompLex *lex){
         }
 
         else if(car == ':'){
-            car = seguinteCaracter();
+            encontrado = asignacion(lex);
+            /*car = seguinteCaracter();
             novoCar(lex, car);
             if(car == '='){
                 encontrado ++;
@@ -296,10 +467,11 @@ int sigLex(CompLex *lex){
                 encontrado ++;
                 retrocederCaracter();
                 aceptarLexema();
-            }
+            }*/
         }
         else if(car == '+'){
-            car = seguinteCaracter();
+            encontrado = asignacion(lex);
+            /*car = seguinteCaracter();
             novoCar(lex, car);
             if(car == '='){
                 encontrado ++;
@@ -312,10 +484,11 @@ int sigLex(CompLex *lex){
                 encontrado ++;
                 retrocederCaracter();
                 aceptarLexema();
-            }
+            }*/
         }
         else if(car == '<'){
-            car = seguinteCaracter();
+            encontrado = frecha(lex);
+            /*car = seguinteCaracter();
             novoCar(lex, car);
             if(car == '-'){
                 encontrado ++;
@@ -328,9 +501,11 @@ int sigLex(CompLex *lex){
                 encontrado ++;
                 retrocederCaracter();
                 aceptarLexema();
-            }
+            }*/
         }
-
+        /*else{
+            erroLE("\nCarácter non recoñecido\n");
+        }*/
 
 
     }

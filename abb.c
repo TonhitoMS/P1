@@ -37,7 +37,7 @@ int _comparar_claves(tipoclave cl1, tipoclave cl2) {
  * destruirse ha de hacerse aqui. El uso de esta funcion
  * permite hacer mas eficiente la destruccion del arbol.*/
 void _destruir_elem(struct tipoelem *E) {
-    //free(E->lexema);
+    free(E->lexema);
 }
 
 /////////////////////////// FIN PARTE MODIFICABLE
@@ -127,7 +127,11 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
 void insertar(abb *A, tipoelem E) {
     if (es_vacio(*A)) {
         *A = (abb) malloc(sizeof (struct celda));
-        (*A)->info = E;
+        (*A)->info.lexema = (char*) malloc(strlen(E.lexema) * sizeof(char));
+        (*A)->info.lexema[0] = '\0';
+        strncat((*A)->info.lexema, E.lexema, strlen(E.lexema));
+        (*A)->info.tipo = E.tipo;
+        //(*A)->info = E;
         (*A)->izq = NULL;
         (*A)->der = NULL;
         return;
@@ -217,8 +221,8 @@ void imprimir(abb A){
     if(!es_vacio(A)){
         if(A->izq != NULL)
             imprimir(A->izq);
-        printf("Lexema: %s\n", A->info.lexema);
-        printf("Compoñente Léxico: %d\n\n", A->info.tipo);
+        printf("Lexema: %-20s\t", A->info.lexema);
+        printf("Compoñente Léxico: %d\n", A->info.tipo);
         if(A->der != NULL)
             imprimir(A->der);
 
@@ -230,13 +234,16 @@ int buscarInsertar(abb *A, tipoelem E) {
     //printf("\nLexema árbore: %s\n", E.lexema);
     if (es_vacio(*A)) {
         //printf("\nBaleiro\n");
-        E.tipo = IDENTIFICADOR;
+        //E.tipo = IDENTIFICADOR;
         *A = (abb) malloc(sizeof (struct celda));
-        (*A)->info = E;
+        (*A)->info.lexema = (char*) malloc(strlen(E.lexema) * sizeof(char));
+        (*A)->info.lexema[0] = '\0';
+        strncat((*A)->info.lexema, E.lexema, strlen(E.lexema));
+        (*A)->info.tipo = IDENTIFICADOR;
         //printf("\nInfo insertamos: %s\n", (*A)->info.lexema);
         (*A)->izq = NULL;
         (*A)->der = NULL;
-        return E.tipo;
+        return IDENTIFICADOR;
     }
     tipoclave cl = _clave_elem(&E);
     int comp = _comparar_clave_elem(cl, (*A)->info);

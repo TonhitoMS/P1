@@ -44,9 +44,9 @@ void destruirTaboa(){
 
 int insertarNaTaboa(char* cadea){
     tipoelem elemento = {cadea, 0};
-    elemento.lexema = (char*) malloc(strlen(cadea) * sizeof(char));
+    /*elemento.lexema = (char*) malloc(strlen(cadea) * sizeof(char));
     elemento.lexema[0] = '\0';
-    strncat(elemento.lexema, cadea, strlen(cadea));
+    strncat(elemento.lexema, cadea, strlen(cadea));*/
     //printf("\nCadea: %s\n", elemento.lexema);
     return buscarInsertar(&taboa, elemento);
 }

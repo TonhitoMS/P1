@@ -1,0 +1,31 @@
+INSTRUCIÓNS DE EXECUCIÓN:
+Dentro do directorio que contén os arquivos, executar o comando make.
+O executable do analizador léxico recibe o nome de ALex.
+Para executalo, executar ./ALex dentro do directorio.
+O programa analizará o ficheiro co nome "concurrentSum.go".
+
+DETALLES DO DESENVOLVEMENTO:
+O programa foi probado nun entorno Ubuntu 20.04.4 LTS, cunha versión do kernel Linux 5.13.0-37-generic.
+A compilación realizouse coa ferramenta GCC na versión 9.4.0.
+
+BREVE EXPLICACIÓN DOS FICHEIROS DO CÓDIGO:
+
+- abb.h/abb.c: estrutura de datos empregada para a táboa de símbolos (Árbore binaria de busca).
+
+- AnalizadorLexico.h/.c: recoñecemento dos lexemas e envío ao analizador sintáctico.
+
+- AnalizadorSintactico.h/.c: solicitude dos lexemas ao analizador lexico e impresión por pantalla.
+
+- Definicions.h: identifica cada compoñente léxico cun número enteiro.
+
+- main.c: ficheiro principal, onde se inicializan os distintos compoñentes do analizador e onde se destrúen.
+
+- SistemaDeEntrada.h/.c: sistema de entrada desenvolto cun dobre centinela.
+  Accede ao ficheiro concurrentSum.go e devolve o seguinte carácter do arquivo. Tamén se pode retroceder
+  no caso no que sexa necesario.
+  
+- TaboaSimbolos.h/.c: interactúa coa estrutura de datos para insertar e buscar os compoñentes léxicos
+
+- XestionErros.h/.c: xestiona o erro correspondente segundo a función que se chame.
+  Contémplanse erros léxicos e erros de entrada saída.
+

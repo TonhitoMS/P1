@@ -339,7 +339,7 @@ int numConPunto(CompLex *lex){
     /* se os caracteres que están antes e despois do '.'
      * non son números, entón tratase do propio caracter '.'
      * */
-    if(!isdigit(lex->lex[strlen(lex->lex) - 3]) && !isdigit(car)){
+    if(!isdigit(lex->lex[0]) && !isdigit(car)){
         lex->lex[strlen(lex->lex)-1] = '\0';
         lex->tipo = lex->lex[strlen(lex->lex)-1];
         encontrado ++;
@@ -448,16 +448,13 @@ int sigLex(CompLex *lex){
         else if(car == '"'){
             encontrado = strings(lex);
         }
-        // se recoñecemos o caracter de fin de ficheiro acaba a análise
-        else if(car == EOF){
-            return 0;
-        }
         // se comeza por '/' poden ser comentarios ou o propio caracter
         else if(car == '/'){
             encontrado = comentarios(lex);
         }
         // signos de puntuación
-        else if(car == ';' || car == ',' || car == '=' || car == '-' || car == '*' || car == '(' || car == ')' || car == '[' || car == ']' || car == '{' || car == '}'){
+        else if(car == ';' || car == ',' || car == '=' || car == '-' || car == '*' ||
+        car == '(' || car == ')' || car == '[' || car == ']' || car == '{' || car == '}'){
             aceptarLexema();
             lex->tipo = car;
             encontrado++;
@@ -488,10 +485,23 @@ int sigLex(CompLex *lex){
         else if(car == '<'){
             encontrado = frecha(lex);
         }
+        // caracteres que ignoramos ('\r' para o caso de Windows)
+        else if(car == '\t' || car == ' ' || car == '\r');
         /* se recoñecemos un salto de liña actualizamos a variable,
          * para o momento de emitir un posible erro
          * */
         else if(car == '\n') linea ++;
+        // se recoñecemos o caracter de fin de ficheiro acaba a análise
+        else if(car == EOF){
+            return 0;
+        }
+        // no caso dun caracter que non se contempla
+        else{
+            //aceptamos para seguir a análise
+            aceptarLexema();
+            //reportamos o erro
+            erroLexico(linea);
+        }
 
     }
 

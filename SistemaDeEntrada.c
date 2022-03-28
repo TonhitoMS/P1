@@ -8,7 +8,9 @@
 typedef struct{
     char buffer1[N+1];
     char buffer2[N+1];
+    // punteiro que indica onde comeza o compoñente que se está recoñecendo
     int inicio;
+    // punteiro que inidica o caracter que se está lendo
     int dianteiro;
 }dobleBuffer;
 
@@ -64,7 +66,7 @@ void encherBuffer(){
 
         //comprobamos se se produciu algún erro
         if(ferror(arquivo)){
-            printf("Erro no inicio do buffer A");
+            erroLE("Erro no enchido do buffer 2");
         }
         else{
             /* forzamos a saído dos datos do buffer temporal, para posteriormente almacenar a posición
@@ -83,7 +85,7 @@ void encherBuffer(){
         dB.buffer1[bytes] = EOF;
 
         if(ferror(arquivo)){
-            printf("Erro no inicio do buffer A");
+            erroLE("Erro no inicio do buffer 1");
         }
         else{
             fflush(arquivo);

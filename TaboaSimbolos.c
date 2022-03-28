@@ -37,9 +37,9 @@ void inicioTaboa(){
 
 void imprimirTaboa(){
     // chamamos á función que imprime a estrutura de datos
-    printf("\n\n----------Táboa de símbolos--------\n");
+    printf("\n\n-------------------Táboa de símbolos-------------------\n");
     imprimir(taboa);
-    printf("-----------------------------------\n");
+    printf("-------------------------------------------------------\n\n");
 
 }
 

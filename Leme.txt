@@ -14,7 +14,7 @@ BREVE EXPLICACIÓN DOS FICHEIROS DO CÓDIGO:
 
 - AnalizadorLexico.h/.c: recoñecemento dos lexemas e envío ao analizador sintáctico.
 
-- AnalizadorSintactico.h/.c: solicitude dos lexemas ao analizador lexico e impresión por pantalla.
+- AnalizadorSintactico.h/.c: solicitude dos lexemas ao analizador léxico e impresión por pantalla.
 
 - Definicions.h: identifica cada compoñente léxico cun número enteiro.
 

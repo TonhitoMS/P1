@@ -1,10 +1,11 @@
 #include "SistemaDeEntrada.h"
 #include "XestionErros.h"
+// tamaño de cada buffer (bytes)
 #define N 128
-//macro para calcular o tamaño dun array
+// macro para calcular o tamaño dun array
 #define TARRAY(x)  (sizeof(x) / sizeof((x)[0]))
 
-//estrutura que contén os dous buffers, e os punteiros inicio e dianteiro
+// estrutura que contén os dous buffers, e os punteiros inicio e dianteiro
 typedef struct{
     char buffer1[N+1];
     char buffer2[N+1];
@@ -14,7 +15,7 @@ typedef struct{
     int dianteiro;
 }dobleBuffer;
 
-//declaramos o doble buffer como variable global
+// declaramos o doble buffer como variable global
 dobleBuffer dB;
 // tamén o arquivo
 FILE *arquivo;

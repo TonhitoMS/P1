@@ -15,7 +15,6 @@ void analise(){
         printf("\n<%d, ""%s"">\n", lex->tipo, lex->lex);
     }
 
-    //printf("\nChegou ao fin do ficheiro\n");
 
     //liberamos a memoria asociada á string da estructura, se esta non se liberou
     if(lex->lex){

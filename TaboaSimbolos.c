@@ -29,7 +29,6 @@ void inicioTaboa(){
     // recorremos o array de palabras reservadas insertándoas na estrutura de datos
     for (int i = 0; i < sizeof(palabras) / sizeof(tipoelem); ++i) {
         insertar(&taboa, palabras[i]);
-        printf("%s %d, ", palabras[i].lexema, palabras[i].tipo);
     }
 
     // mostramos a táboa por pantalla

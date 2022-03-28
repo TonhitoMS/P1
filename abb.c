@@ -122,7 +122,7 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
 void insertar(abb *A, tipoelem E) {
     if (es_vacio(*A)) {
         *A = (abb) malloc(sizeof (struct celda));
-        (*A)->info.lexema = (char*) malloc(strlen(E.lexema) * sizeof(char));
+        (*A)->info.lexema = (char*) malloc(strlen(E.lexema) * sizeof(char) +1);
         (*A)->info.lexema[0] = '\0';
         strncat((*A)->info.lexema, E.lexema, strlen(E.lexema));
         (*A)->info.tipo = E.tipo;
@@ -231,7 +231,7 @@ int buscarInsertar(abb *A, tipoelem E) {
         //printf("\nBaleiro\n");
         //E.tipo = IDENTIFICADOR;
         *A = (abb) malloc(sizeof (struct celda));
-        (*A)->info.lexema = (char*) malloc(strlen(E.lexema) * sizeof(char));
+        (*A)->info.lexema = (char*) malloc(strlen(E.lexema) * sizeof(char) +1);
         (*A)->info.lexema[0] = '\0';
         strncat((*A)->info.lexema, E.lexema, strlen(E.lexema));
         (*A)->info.tipo = IDENTIFICADOR;

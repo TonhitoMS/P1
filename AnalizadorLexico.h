@@ -4,7 +4,9 @@
 #define P1_ANALIZADORLEXICO_H
 
 typedef struct{
+    // array de caracteres que almacena o lexema
     char* lex;
+    // tipo de compoñente léxico segundo Definicions.h
     int tipo;
 }CompLex;
 

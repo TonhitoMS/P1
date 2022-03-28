@@ -1,13 +1,14 @@
-#include <string.h>
-#include <stdlib.h>
 #include "TaboaSimbolos.h"
 #include "abb.h"
 #include <stdio.h>
 #include "Definicions.h"
 
+
+// declaramos a estrutura de datos como variable global
 abb taboa;
 
 void inicioTaboa(){
+    // array de estruturas que conteñen as palabras reservadas e o número asociado
     tipoelem palabras[] = {
             {"package", PACKAGE},
             {"import", IMPORT},
@@ -22,16 +23,21 @@ void inicioTaboa(){
             {"_", BLANK},
     };
 
+    // inicializamos a estrutura de datos
     crear(&taboa);
+
+    // recorremos o array de palabras reservadas insertándoas na estrutura de datos
     for (int i = 0; i < sizeof(palabras) / sizeof(tipoelem); ++i) {
         insertar(&taboa, palabras[i]);
         printf("%s %d, ", palabras[i].lexema, palabras[i].tipo);
     }
-    //printf("\nPackage: %d\n",buscarInsertar(&taboa, palabras[0]));
+
+    // mostramos a táboa por pantalla
     imprimirTaboa(taboa);
 }
 
 void imprimirTaboa(){
+    // chamamos á función que imprime a estrutura de datos
     printf("\n\n----------Táboa de símbolos--------\n");
     imprimir(taboa);
     printf("-----------------------------------\n");
@@ -39,14 +45,16 @@ void imprimirTaboa(){
 }
 
 void destruirTaboa(){
+    // destruímos a táboa eliminando a estrutura de datos (libera a memoria asociada)
     destruir(&taboa);
 }
 
 int insertarNaTaboa(char* cadea){
+    /* introducimos a cadea na estrutura tipoelem que recibirá e función da estrutura de datos.
+     * O número asociado é 0 por elección, xa que todos os lexemas novos que se introducen na
+     * táboa de símbolos son identificadores
+     * */
     tipoelem elemento = {cadea, 0};
-    /*elemento.lexema = (char*) malloc(strlen(cadea) * sizeof(char));
-    elemento.lexema[0] = '\0';
-    strncat(elemento.lexema, cadea, strlen(cadea));*/
-    //printf("\nCadea: %s\n", elemento.lexema);
+    // chamamos á función da estrutura de datos e devolvemos o número asociado ao lexema
     return buscarInsertar(&taboa, elemento);
 }

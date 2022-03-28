@@ -8,7 +8,7 @@
  * ordenacion y elemento de celda.
  */
 
-///////////////////////////////////////INICIO PARTE MODIFICABLE
+
 typedef char *tipoclave;
 
 typedef struct tipoelem{
@@ -16,7 +16,7 @@ typedef struct tipoelem{
     int tipo;
 }tipoelem;
 
-//////////////////////////////////////////FIN PARTE MODIFICABLE
+
 		
 typedef struct celda * abb;//tipo opaco
 

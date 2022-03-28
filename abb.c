@@ -5,7 +5,7 @@
 #include "Definicions.h"
 
 
-///////////////////////// ESTRUCTURAS DE DATOS
+///////////////////////// ESTRUTURAS DE DATOS
 
 
 
@@ -14,11 +14,9 @@ struct celda {
     struct celda *izq, *der;
 };
 
-//////////////////////// FUNCIONES
+//////////////////////// FUNCIÓNS
 
 
-/////////////////////////////////////////////////////////////
-/////////////////////////// INICIO PARTE MODIFICABLE
 
 /*Extraer la clave de una celda */
 tipoclave _clave_elem(tipoelem *E) {
@@ -39,9 +37,6 @@ int _comparar_claves(tipoclave cl1, tipoclave cl2) {
 void _destruir_elem(struct tipoelem *E) {
     free(E->lexema);
 }
-
-/////////////////////////// FIN PARTE MODIFICABLE
-/////////////////////////////////////////////////////////////
 
 //OPERACIONES DE CREACIÓN Y DESTRUCCIÓN
 

@@ -470,7 +470,7 @@ int sigLex(CompLex *lex){
             }*/
         }
         else if(car == '+'){
-            encontrado = asignacion(lex);
+            encontrado = sumaAsignacion(lex);
             /*car = seguinteCaracter();
             novoCar(lex, car);
             if(car == '='){

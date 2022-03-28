@@ -3,26 +3,26 @@
 
 //Palabras reservadas
 
-#define PACKAGE 300 //package
-#define IMPORT 301 //import
-#define FUNC 302 //func
-#define CHAN 303 //chan
-#define VAR 304 //var
-#define FOR 305 //for
-#define RANGE 306 //range
-#define GO 307 //go
-#define FLOAT 308 //float32
-#define REAL 309 //real
-#define BLANK 310 //_
+#define PACKAGE 273 //package
+#define IMPORT 274 //import
+#define FUNC 275 //func
+#define CHAN 276 //chan
+#define VAR 277 //var
+#define FOR 278 //for
+#define RANGE 279 //range
+#define GO 280 //go
+#define FLOAT 281 //float32
+#define REAL 282 //real
+#define BLANK 283 //_
 //Fin palabras reservadas
 
-#define OP_ASIG 311 //:=
-#define OP_FRECHA 312 //<-
-#define OP_SUMA_ASIG 313 //+=
-#define STRING 314
-#define ENTEIRO 315
-#define IMAXINARIO 316
-#define IDENTIFICADOR 317
+#define OP_ASIG 284 //:=
+#define OP_FRECHA 285 //<-
+#define OP_SUMA_ASIG 286 //+=
+#define STRING 287
+#define ENTEIRO 288
+#define IMAXINARIO 289
+#define IDENTIFICADOR 290
 
 
 
